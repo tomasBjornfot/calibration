@@ -1,6 +1,8 @@
 {
-  "xpos": 0.0,
-  "ypos": 0.0,
-  "zheight": 0.0,
-  "filename": "top"
+  "ToolRadius": 12.5,
+  "MaxHeight": 129,
+  "Xpos": 200.0,
+  "Ypos": 1500.0,
+  "MaterialThickness": 100.0,
+  "FilePrefix": "top"
 }

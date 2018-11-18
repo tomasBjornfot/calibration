@@ -1,0 +1,36 @@
+1. Set preliminary MachineRotCenter values:
+    x, index 1 == rotation center in x direction
+    z, index 2 == rotation center in z direction
+2. Start machine
+3. Homing
+4. Start spindle
+5. Run cal_top.gc
+6. Stop spindle
+7. Homing
+8. Rotate the material
+9. Run cal_bottom.gc
+10. Stop spindle
+11. Homing.
+12. Measure on the material:
+    ... height of the cube
+    ... offset between vertical cuts
+13. Adjust the MachineRotCenter by setting
+    ... z to z + (60 - height)/2
+    ... x to 
+        x + difference/2, if top is to the left of the bottom 
+        x - difference/2, if top is to the right of the bottom 
+
+14. Backup settings.json => cp settings.json settings.bak
+15. Update settings.json with new MachineRotCenter
+16. Start spindle
+17. Homing
+18. Start spindle
+19. Run cal_top.gc
+20. Stop spindle
+21. Homing
+22. Rotate the material
+23. Run cal_bottom.gc
+24. Stop spindle
+25. Homing
+26. Measure the material. Height should be 60 mm and vertical cuts should have no offset.
+27. if not go back to step 14
