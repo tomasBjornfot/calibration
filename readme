@@ -9,8 +9,10 @@ Felet i x är halva skilladen mellan vertikala planen x och x-.
 
 Addera felet med HeightOffset[2] gör en homing, för en ny fräsnng och mät.  
 
- 
 Parametrar i json filen:
-xpos, positionen i xled som avstånd från centrum
-ypos, positionen i yled 
-zheight högsta positionen i z för fräsningen. Är oftast 10 mm nedanför mateialgränsen 
+ToolRadius, radien på fräsverktyget
+MaxHeight, det högsta tillåtena z värdet. Samma som HomingOffset[2]
+Xpos, positionen i xled som avstånd från centrum
+Ypos, positionen i yled 
+MaterialThickness, tjockleken på materialet
+FilePrefix, om man vill ge ett mer specifikt namn på g-kod filen
