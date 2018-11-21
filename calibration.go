@@ -51,10 +51,15 @@ func make_plane(start [3]float64, end [3]float64, dx float64, no_lines int) [][3
     }
     return lines
 }
+
 func make_planes(plane [][3]float64, dz float64, no_planes int) [][3]float64{
-    planes := plane
-    for i:=0; i<no_planes; i++ {
-        new_plane := plane
+    
+    new_plane := make([][3]float64, len(plane))
+    copy(new_plane, plane)
+    planes := make([][3]float64, len(plane))
+    copy(planes, plane)
+    
+    for i:=1; i<no_planes ; i++ {
         for j:= range new_plane {
             new_plane[j][2] -= dz 
         }
@@ -62,6 +67,7 @@ func make_planes(plane [][3]float64, dz float64, no_planes int) [][3]float64{
     }
     return planes
 }
+
 func make_gcode(filename string, data [][3]float64) {
     s := ""
     for i := 0; i < len(data); i++ {
@@ -72,7 +78,7 @@ func make_gcode(filename string, data [][3]float64) {
         s += " X" + x_string
         s += " Y" + y_string
         s += " Z" + z_string
-        s += " F1000"
+        s += " F1200"
         s += "\n"
     }
     myfile, _ := os.Create(filename)
@@ -102,22 +108,24 @@ func main() {
     
     // make the wide plane for the horizontal (z) plane
     p0 := [3]float64 {xpos, ypos, 40 + tr}
-    p1 := [3]float64 {xpos, ypos + 100, 40 + tr}
+    p1 := [3]float64 {xpos, ypos + 50, 40 + tr}
     plane_z := make_plane(p0, p1, 5.0, 16)
     
     // adds a start point to plane z
     plane_z = add_start_point(plane_z, max_height)
 
     // make the smaller planes to make the vertical (x) plane
-    p0 = [3]float64 {xpos, ypos, 40 + tr}
-    p1 = [3]float64 {xpos, ypos + 100, 40 + tr}
+    p0 = [3]float64 {xpos, ypos, 30 + tr}
+    p1 = [3]float64 {xpos, ypos + 50, 30 + tr}
     plane_x := make_plane(p0, p1, 5.0, 8) 
-    planes_x := make_planes(plane_x, 10.0, 6) 
+    planes_x := make_planes(plane_x, 10.0, 5) 
     
     // adds an end point to plane x 
     planes_x = add_end_point(planes_x, max_height)
+
+    // merge plane_z and plane_x
     planes0 := append(plane_z, planes_x...)
-        
+
     // make the other side 
     planes1 := make([][3]float64, len(planes0))
     copy(planes1, planes0)
@@ -125,5 +133,18 @@ func main() {
         planes1[i][0] = -planes1[i][0]
     } 
     planes := append(planes0, planes1...)
+    
+    // make the center
+    planes3 := make([][3]float64, len(planes0))
+    copy(planes3, planes0)
+    for i := range planes1 {
+		planes3[i][0] = planes1[i][0] + xpos + 50.0
+	}
+    planes = append(planes, planes3...)
+    
+    // adds an end point to planes
+    planes = add_end_point(planes, max_height)
+    
     make_gcode(file_prefix+"_calibration.gc", planes)
+    
 }
