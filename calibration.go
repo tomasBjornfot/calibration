@@ -134,14 +134,6 @@ func main() {
     } 
     planes := append(planes0, planes1...)
     
-    // make the center
-    planes3 := make([][3]float64, len(planes0))
-    copy(planes3, planes0)
-    for i := range planes1 {
-		planes3[i][0] = planes1[i][0] + xpos + 50.0
-	}
-    planes = append(planes, planes3...)
-    
     // adds an end point to planes
     planes = add_end_point(planes, max_height)
     
